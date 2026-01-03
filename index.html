@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Form Handling</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background-color: #f4f4f9; }
+        .form-container { 
+            background: white; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            max-width: 400px;
+        }
+        input { display: block; width: 100%; margin: 10px 0; padding: 8px; box-sizing: border-box; }
+        button { background: #007bff; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; }
+        button:hover { background: #0056b3; }
+        h2 { color: #333; }
+        p { font-size: 0.9rem; color: #666; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const useForm = (initialValues) => {
+            const [values, setValues] = useState(initialValues);
+
+            const handleChange = (event) => {
+                const { name, value } = event.target;
+                setValues({ ...values, [name]: value });
+                
+                console.log(`[Input Change] Field: ${name}, Value: ${value}`);
+            };
+
+            const handleSubmit = (event, type) => {
+                event.preventDefault();
+                console.log(`[Form Submitted] Type: ${type}`, values);
+                alert(`${type} Successful! Check console for data.`);
+            };
+
+            return { values, handleChange, handleSubmit };
+        };
+
+        const LoginForm = () => {
+            const { values, handleChange, handleSubmit } = useForm({ email: '', password: '' });
+
+            return (
+                <div className="form-container">
+                    <h2>Student Login</h2>
+                    <form onSubmit={(e) => handleSubmit(e, "Login")}>
+                        <input 
+                            name="email" 
+                            type="email" 
+                            placeholder="Email Address" 
+                            value={values.email} 
+                            onChange={handleChange} 
+                            required 
+                        />
+                        <input 
+                            name="password" 
+                            type="password" 
+                            placeholder="Password" 
+                            value={values.password} 
+                            onChange={handleChange} 
+                            required 
+                        />
+                        <button type="submit">Login</button>
+                    </form>
+                </div>
+            );
+        };
+
+        const RegistrationForm = () => {
+            const { values, handleChange, handleSubmit } = useForm({ 
+                fullName: '', 
+                studentId: '', 
+                course: '' 
+            });
+
+            return (
+                <div className="form-container">
+                    <h2>Student Registration</h2>
+                    <form onSubmit={(e) => handleSubmit(e, "Registration")}>
+                        <input 
+                            name="fullName" 
+                            placeholder="Full Name" 
+                            value={values.fullName} 
+                            onChange={handleChange} 
+                            required 
+                        />
+                        <input 
+                            name="studentId" 
+                            placeholder="Student ID (e.g. S12345)" 
+                            value={values.studentId} 
+                            onChange={handleChange} 
+                            required 
+                        />
+                        <input 
+                            name="course" 
+                            placeholder="Course Name" 
+                            value={values.course} 
+                            onChange={handleChange} 
+                            required 
+                        />
+                        <button type="submit">Register</button>
+                    </form>
+                </div>
+            );
+        };
+
+        const App = () => (
+            <div>
+                <h1>University Portal</h1>
+                <hr />
+                <LoginForm />
+                <RegistrationForm />
+            </div>
+        );
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
